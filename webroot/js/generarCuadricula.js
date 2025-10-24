@@ -1,6 +1,6 @@
 // Variables
 const table = document.getElementById("tabla"); // Referencia a la tabla HTML donde se generará la sopa de letras
-const palabras = ["oso", "perro", "lagarto", "gato", "pajaro", "bufalo", "leon","tigre","cabra","zebra","elefante","tiburon","gallina","serpiente","zorro","lobo","aguila"]; // Lista de palabras a colocar en la sopa
+const palabras = ["oso", "perro", "lagarto", "gato", "pajaro", "bufalo", "leon","tigre","cabra","zebra","elefante","tiburon","gallina","zorro","lobo","aguila"]; // Lista de palabras a colocar en la sopa
 
 // OBTENER PALABRA MAS LARGA
 // Devuelve la longitud de la palabra más larga del array
