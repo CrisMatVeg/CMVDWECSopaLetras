@@ -1,0 +1,25 @@
+* {
+    box-sizing: border-box;
+  }
+
+  table {
+    border-collapse: collapse;
+    border: 1px solid black;
+    text-align: center;
+  }
+
+  td {
+    width: 35px;
+    height: 35px;
+    border: 1px solid black;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .numero {
+    background-color: rgb(206, 206, 206);
+    font-weight: bold;
+  }
