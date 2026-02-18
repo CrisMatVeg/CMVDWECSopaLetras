@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 3px solid black;
+            background-color: rgb(255, 243, 228);
+        }
+    </style>
+
+</head>
+
+<body>
+    <h3>Imagen Original vs Imagen Modificada</h3>
+
+    <label>Rojo
+        <input type="range" id="r" min="-100" max="100" value="0">
+    </label>
+    <br>
+    <label>Verde
+        <input type="range" id="g" min="-100" max="100" value="0">
+    </label>
+    <br>
+    <label>Azul
+        <input type="range" id="b" min="-100" max="100" value="0">
+    </label>
+
+    <br><br>
+
+    <!-- Canvas para original y modificado -->
+    <canvas id="canvasOriginal" width="500" height="400"></canvas>
+    <canvas id="canvasModificado" width="500" height="400"></canvas>
+
+    <script>
+        const canvasOriginal = document.getElementById("canvasOriginal");
+        const ctxOriginal = canvasOriginal.getContext("2d");
+
+        const canvasModificado = document.getElementById("canvasModificado");
+        const ctxModificado = canvasModificado.getContext("2d");
+
+        const rRange = document.getElementById("r");
+        const gRange = document.getElementById("g");
+        const bRange = document.getElementById("b");
+
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.src = "https://picsum.photos/id/323/500/400";
+
+        let originalData = null;
+
+        // Limita valores entre 0 y 255
+        function limitar(valor) {
+            if (valor < 0) return 0;
+            if (valor > 255) return 255;
+            return valor;
+        }
+
+        // Actualiza el canvas modificado
+        function actualizar() {
+            let data = originalData.data;
+            let nueva = ctxModificado.createImageData(originalData.width, originalData.height);
+
+            const r = Number(rRange.value);
+            const g = Number(gRange.value);
+            const b = Number(bRange.value);
+
+            for (let i = 0; i < data.length; i += 4) {
+                nueva.data[i] = limitar(data[i] + r); // rojo
+                nueva.data[i + 1] = limitar(data[i + 1] + g); // verde
+                nueva.data[i + 2] = limitar(data[i + 2] + b); // azul
+                nueva.data[i + 3] = data[i + 3];              // alpha
+            }
+
+            ctxModificado.putImageData(nueva, 0, 0);
+        }
+
+        // Cargar la imagen
+        img.onload = function () {
+            // Dibujar original
+            ctxOriginal.drawImage(img, 0, 0);
+            // Guardar los píxeles para modificar
+            originalData = ctxOriginal.getImageData(0, 0, canvasOriginal.width, canvasOriginal.height);
+
+            // También dibujar inicialmente igual en el modificado
+            ctxModificado.putImageData(originalData, 0, 0);
+        };
+
+        // Escuchar cambios en los sliders
+        rRange.addEventListener("input", actualizar);
+        gRange.addEventListener("input", actualizar);
+        bRange.addEventListener("input", actualizar);
+    </script>
+</body>
+
+</html>

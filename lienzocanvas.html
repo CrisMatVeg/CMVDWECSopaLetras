@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        canvas {
+            border: 3px solid black;
+            background-color: rgb(255, 243, 228);
+        }
+
+        #colorPreview {
+            width: 50px;
+            height: 50px;
+            border: 2px solid black;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Lienzo para pintar</h1>
+
+    <!-- Controles de color -->
+    <label>Rojo
+        <input type="range" id="r" min="0" max="255" value="0">
+    </label>
+    <br>
+    <label>Verde
+        <input type="range" id="g" min="0" max="255" value="0">
+    </label>
+    <br>
+    <label>Azul
+        <input type="range" id="b" min="0" max="255" value="0">
+    </label>
+    <div id="colorPreview"></div>
+
+    <br><br>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <button id="borrarLienzo">Borrar Lienzo</button>
+
+    <script>
+        const c = document.getElementById("canvas");
+        const ctx = c.getContext("2d");
+
+        // sliders
+        const rRange = document.getElementById("r");
+        const gRange = document.getElementById("g");
+        const bRange = document.getElementById("b");
+        const colorPreview = document.getElementById("colorPreview");
+
+        let pintando = false;
+        let tamañoPincel = 10;
+        let colorPincel = "rgb(0,0,0)";
+
+        let ultimaX = 0;
+        let ultimaY = 0;
+
+        // actualizar color
+        function actualizarColor() {
+            const r = rRange.value;
+            const g = gRange.value;
+            const b = bRange.value;
+
+            colorPincel = `rgb(${r}, ${g}, ${b})`;
+            colorPreview.style.backgroundColor = colorPincel;
+        }
+
+        // inicializar color
+        actualizarColor();
+
+        // eventos sliders
+        rRange.addEventListener("input", actualizarColor);
+        gRange.addEventListener("input", actualizarColor);
+        bRange.addEventListener("input", actualizarColor);
+
+        // al presionar
+        c.addEventListener("mousedown", (e) => {
+            pintando = true;
+            ultimaX = e.offsetX;
+            ultimaY = e.offsetY;
+        });
+
+        // al soltar
+        c.addEventListener("mouseup", () => pintando = false);
+        c.addEventListener("mouseleave", () => pintando = false);
+
+        // movimiento con trazo continuo
+        c.addEventListener("mousemove", (e) => {
+            if (!pintando) return;
+
+            const x = e.offsetX;
+            const y = e.offsetY;
+
+            ctx.strokeStyle = colorPincel;
+            ctx.lineWidth = tamañoPincel;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+
+            ctx.beginPath();
+            ctx.moveTo(ultimaX, ultimaY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            ultimaX = x;
+            ultimaY = y;
+        });
+
+        // borrar lienzo
+        document.getElementById("borrarLienzo").addEventListener("click", () => {
+            ctx.clearRect(0, 0, c.width, c.height);
+        });
+
+    </script>
+</body>
+
+</html>

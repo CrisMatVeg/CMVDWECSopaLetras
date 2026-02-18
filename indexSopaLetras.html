@@ -13,6 +13,12 @@
   <main>
     <div>
       <h1>BIENVENIDO A MI SOPA DE LETRAS!</h1>
+      <label id="labeldif" for="dificultad">Dificultad:</label>
+      <select id="dificultad">
+        <option value="facil">Fácil</option>
+        <option value="medio">Medio</option>
+        <option value="dificil">Difícil</option>
+      </select>
       <button>Empezar Partida</button>
     </div>
     <div id="containerTablas">
@@ -38,16 +44,12 @@
           </tr>
         </table>
       </div>
-      <script src="./webroot/js/crono.js"></script>
     </div>
-    <script src="./webroot/js/generarCuadricula.js" defer></script>
   </main>
   <footer>
     <h3>Cristian Mateos Vega</h3>
     <div id="reloj"></div>
-    <script src="./webroot/js/footerDatos.js"></script>
   </footer>
-  <!-- <script src="./webroot/js/obtenerPuntuaciones.js"></script> -->
+  <script type="module" src="./webroot/js/main.js"></script>
 </body>
-
 </html>
