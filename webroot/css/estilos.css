@@ -225,15 +225,6 @@ td {
   footer {
     height: auto;
     text-align: center;
-    margin-bottom: 40px;
-  }
-  main div:nth-of-type(1){
-    display: inline-block;
-    margin-bottom: 20px;
-  }
-
-  .oculto{
-    display: none;
   }
 
   h3 {

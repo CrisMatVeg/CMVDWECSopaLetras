@@ -35,7 +35,7 @@ export function adivinarPalabras(celdasMarcadas, palabraSeleccionada) {
           cronometro.classList.remove("cronometro");
           cronometro.classList.add("puntuacion");
 
-          actualizarPuntuaciones();
+          actualizarPuntuaciones(true);
 
           // Desactiva todas las celdas de la tabla
           document.querySelectorAll(".tablaSopa td").forEach((td) => {
