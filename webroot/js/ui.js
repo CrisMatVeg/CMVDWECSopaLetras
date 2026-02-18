@@ -1,64 +1,35 @@
 import { estadoJuego } from "./config.js";
-export function actualizarPuntuaciones() {
+export function actualizarPuntuaciones(guardar = false) {
   const nivel = estadoJuego.dificultad;
-  // Comprueba si el navegador tiene conexión a internet
-  const navegadorOnline = navigator.onLine;
 
-  if (!navegadorOnline) {
-    alert("NAVEGADOR OFFLINE");
-  }
-
-  // Elementos donde se muestran las 3 mejores puntuaciones
   const celdaPrimera = document.getElementById("v1");
   const celdaSegunda = document.getElementById("v2");
   const celdaTercera = document.getElementById("v3");
 
-  // Elemento donde aparece la puntuación actual (cronómetro detenido convertido a texto)
+  // Obtener la puntuación actual en número si existe
   const elementoPuntuacionActual = document.querySelector(".puntuacion");
-
-  // Si no existen puntuaciones guardadas y tampoco hay puntuación actual, poner todo a cero
-  if (!elementoPuntuacionActual && !localStorage.getItem("puntuaciones")) {
-    celdaPrimera.innerText = 0;
-    celdaSegunda.innerText = 0;
-    celdaTercera.innerText = 0;
-    return; // No hay nada más que hacer
-  }
-
-  // Obtener la puntuación actual en número
   let puntuacionTexto = 0;
-  if (elementoPuntuacionActual) {
+  if (guardar && elementoPuntuacionActual) {
     const partesTiempo = elementoPuntuacionActual.textContent.split(":");
     puntuacionTexto = parseInt(partesTiempo.join(""));
   }
 
-  // Obtener o inicializar el objeto de puntuaciones
-  if (!localStorage.getItem("puntuaciones")) {
-    var puntuaciones = {
-      facil: [],
-      medio: [],
-      dificil: [],
-    };
-  } else {
-    puntuaciones = JSON.parse(localStorage.getItem("puntuaciones"));
-  }
+  // Cargar puntuaciones guardadas o inicializar
+  let puntuaciones = localStorage.getItem("puntuaciones")
+    ? JSON.parse(localStorage.getItem("puntuaciones"))
+    : { facil: [], medio: [], dificil: [] };
 
-  // Guardar puntuación actual en LocalStorage
-  if (elementoPuntuacionActual) {
-    // Insertar la nueva puntuación y ordenar de menor a mayor (mejor tiempo primero)
-    if (!puntuaciones[nivel]) {
-      puntuaciones[nivel] = [];
-    }
+  // Solo guardar nueva puntuación si se indica
+  if (guardar && elementoPuntuacionActual) {
+    if (!puntuaciones[nivel]) puntuaciones[nivel] = [];
     puntuaciones[nivel].push(puntuacionTexto);
     puntuaciones[nivel].sort((a, b) => a - b);
-    // Mantener solo las 3 mejores
     puntuaciones[nivel] = puntuaciones[nivel].slice(0, 3);
-
-    // Guardar de nuevo en localStorage
     localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
   }
 
-  // Mostrar las 3 puntuaciones en pantalla
-  const mostrar = puntuaciones[nivel];
+  // Mostrar las 3 mejores puntuaciones del nivel actual
+  const mostrar = puntuaciones[nivel] || [];
   celdaPrimera.innerText = mostrar[0] !== undefined ? mostrar[0] : 0;
   celdaSegunda.innerText = mostrar[1] !== undefined ? mostrar[1] : 0;
   celdaTercera.innerText = mostrar[2] !== undefined ? mostrar[2] : 0;

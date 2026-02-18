@@ -18,7 +18,8 @@ export const configuracionDificultad = {
 export const estadoJuego = {
   contadorAdivinadas: 0,
   puntuacion: 0,
-  dificultad: "facil"
+  dificultad: "facil",
+  dificultadPartida: null,
 };
 
 export async function generarPalabras(cantidad) {

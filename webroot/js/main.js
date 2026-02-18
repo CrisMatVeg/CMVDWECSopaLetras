@@ -15,7 +15,6 @@ import { adivinarPalabras, tdFuncion } from "./seleccion.js";
 iniciarRelojFooter();
 document.getElementById("dificultad").addEventListener("change", (e) => {
   estadoJuego.dificultad = e.target.value;
-  actualizarPuntuaciones();
 });
 document.getElementsByTagName("button")[0].addEventListener("click", async(ev) => {
     const dificultad = document.getElementById("dificultad");
