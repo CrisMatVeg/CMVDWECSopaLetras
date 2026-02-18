@@ -1,25 +1,241 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  margin: 0px;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  background-color: lightskyblue;
+  text-align: center;
+  justify-items: center;
+  flex: 1;
+  padding-top: 25px;
+}
+
+#containerTablas {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+td {
+  user-select: none;
+}
+
+#pos1 {
+  background-color: rgb(216, 201, 118);
+  color: rgb(121, 92, 21);
+}
+#pos2 {
+  background-color: rgb(168, 168, 168);
+  color: rgb(77, 77, 77);
+}
+#pos3 {
+  background-color: rgb(216, 154, 118);
+  color: rgb(146, 80, 33);
+}
+
+h1 {
+  margin-bottom: 60px;
+  color: rgb(54, 59, 104);
+  padding: 10px;
+  border: 3px solid rgb(54, 59, 104);
+  border-radius: 5px;
+}
+
+h3 {
+  color: aliceblue;
+  padding: 30px;
+  font-size: 30px;
+}
+
+.inactiva {
+  display: none;
+}
+
+footer {
+  background-color: rgb(54, 59, 104);
+  position: relative;
+}
+
+table {
+  text-align: center;
+  margin-bottom: 40px;
+}
+main div:nth-of-type(1) {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.oculto {
+  display: none;
+}
+
+td {
+  width: 35px;
+  height: 35px;
+  border: 2px solid rgb(54, 59, 104);
+  border-radius: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  vertical-align: middle;
+  background-color: aliceblue;
+}
+
+span {
+  display: block;
+  margin: 10px;
+}
+
+.adivinada {
+  text-decoration: line-through 2px;
+}
+
+td:hover {
+  background-color: lightgreen;
+}
+
+.cronometro {
+  font-weight: bold;
+  margin: 10px;
+  font-size: 20px;
+}
+
+#palabras {
+  background-color: aliceblue;
+  border: 2px solid rgb(54, 59, 104);
+  height: 520px;
+  width: 300px;
+  border-radius: 5px;
+}
+
+.selected {
+  background-color: green;
+}
+
+.marcada {
+  background-color: blueviolet;
+}
+
+.correcta {
+  background-color: lightgreen;
+}
+
+.incorrecta {
+  background-color: lightcoral;
+}
+
+.selected2 {
+  background-color: lightseagreen;
+}
+
+.numero {
+  background-color: rgb(206, 206, 206);
+  font-weight: bold;
+}
+
+#reloj {
+  position: absolute;
+  color: aliceblue;
+  font-size: 30px;
+  font-weight: bolder;
+  right: 0;
+  padding: 30px;
+  top: 0;
+}
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+/* Ajustes generales */
+main {
+  min-height: 85vh;
+  padding: 20px;
+}
+
+/* Que la sopa no tenga tamaño fijo */
+#palabras {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  min-height: 300px;
+}
+
+/* Tabla adaptable */
+/* table {
+  width: 100%;
+  max-width: 300px;
+} */
+
+/* Celda adaptable */
+td {
+  width: clamp(25px, 7vw, 35px);
+  height: clamp(25px, 7vw, 35px);
+  font-size: clamp(14px, 4vw, 18px);
+}
+
+/* Contenedor principal */
+#containerTablas {
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* =========================
+   MÓVIL
+========================= */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 20px;
+    margin-bottom: 30px;
   }
 
-  table {
-    border-collapse: collapse;
-    border: 1px solid black;
+  main div:nth-of-type(1) {
+    display: block;
+    width: 100%;
+  }
+
+  #containerTablas {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #palabras {
+    max-width: 100%;
+  }
+
+  #tablaPuntuaciones {
+    font-size: 14px;
+  }
+
+  form {
+    margin-bottom: 15px;
+  }
+
+  footer {
+    height: auto;
     text-align: center;
   }
 
-  td {
-    width: 35px;
-    height: 35px;
-    border: 1px solid black;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: center;
-    vertical-align: middle;
+  h3 {
+    font-size: 18px;
+    padding: 15px;
   }
 
-  .numero {
-    background-color: rgb(206, 206, 206);
-    font-weight: bold;
+  #reloj {
+    position: static;
+    display: block;
+    padding: 10px;
+    font-size: 18px;
   }
+}

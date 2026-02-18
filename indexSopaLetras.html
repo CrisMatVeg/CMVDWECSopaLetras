@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="./webroot/css/estilos.css">
-  </head>
 
-  <body>
-    <table id="tabla"></table>
-    <script src="./webroot/js/generarCuadricula.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link rel="stylesheet" href="./webroot/css/estilos.css">
+</head>
+
+<body>
+  <main>
+    <div>
+      <h1>BIENVENIDO A MI SOPA DE LETRAS!</h1>
+      <label id="labeldif" for="dificultad">Dificultad:</label>
+      <select id="dificultad">
+        <option value="facil">Fácil</option>
+        <option value="medio">Medio</option>
+        <option value="dificil">Difícil</option>
+      </select>
+      <button>Empezar Partida</button>
+    </div>
+    <div id="containerTablas">
+      <div id="palabras"></div>
+      <div>
+        <form>
+          <label for="nombre">Nombre:</label>
+          <input type="text" name="nombre" id="nombre" placeholder="Tiempo Record!" disabled>
+        </form>
+        <table id="tablaPuntuaciones">
+          <th>PUNTUACIONES</th>
+          <tr>
+            <td id="pos1">1º</td>
+            <td id="v1"></td>
+          </tr>
+          <tr>
+            <td id="pos2">2º</td>
+            <td id="v2"></td>
+          </tr>
+          <tr>
+            <td id="pos3">3º</td>
+            <td id="v3"></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <h3>Cristian Mateos Vega</h3>
+    <div id="reloj"></div>
+  </footer>
+  <script type="module" src="./webroot/js/main.js"></script>
+</body>
 </html>

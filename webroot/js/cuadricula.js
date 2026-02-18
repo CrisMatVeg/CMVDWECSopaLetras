@@ -1,75 +1,31 @@
-// Variables
-const table = document.getElementById("tabla"); // Referencia a la tabla HTML donde se generará la sopa de letras
-const palabras = ["oso", "perro", "lagarto", "gato", "pajaro", "bufalo", "leon","tigre","cabra","zebra","elefante","tiburon","gallina","zorro","lobo","aguila"]; // Lista de palabras a colocar en la sopa
+import { calcularPosicionAleatoria } from "./utils.js";
+import { tdFuncion } from "./seleccion.js";
 
-// OBTENER PALABRA MAS LARGA
-// Devuelve la longitud de la palabra más larga del array
-function obtenerPalabraMasLarga(arrayPalabras) {
-  let maxLongitud = 0;
-  for (const palabra of arrayPalabras) {
-    if (palabra.length > maxLongitud) {
-      maxLongitud = palabra.length;
-    }
-  }
-  return maxLongitud;
-}
-
-// CALCULAR TOTAL DE LETRAS DE LA CUADRICULA
-// Suma la longitud de todas las palabras del array
-function calcularTotalLetras(arrayPalabras) {
-  let acumulador = 0;
-  for (const palabra of arrayPalabras) {
-    acumulador += palabra.length;
-  }
-  return acumulador;
-}
-
-//CALCULAR DIMENSIONES MINIMAS DE LA TABLA, LONGITUD DE ANCHO Y ALTO
-// Calcula una dimensión mínima cuadrada para la tabla, basada en el total de letras y longitud máxima
-function calcularDimensionTabla(arrayPalabras) {
-  const totalLetras = calcularTotalLetras(arrayPalabras);
-  const maxPalabra = obtenerPalabraMasLarga(arrayPalabras);
-
-  // Se toma el doble del total de letras (por seguridad) y se saca raíz cuadrada para obtener una dimensión cuadrada
-  let longitudFilayCol = Math.ceil(Math.sqrt(totalLetras * 2));
-
-  // Asegura que la tabla al menos tenga espacio para la palabra más larga
-  if (longitudFilayCol < maxPalabra) {
-    longitudFilayCol = maxPalabra;
-  }
-
-  return longitudFilayCol;
-}
-
-//GENERAR LA CUADRICULA EN UN ARRAY BIDIMENSIONAL
-// Crea una tabla cuadrada HTML de celdas vacías, según la longitud pasada
-function generarCuadricula(longitudFilayCol) {
-  for (let i = 0; i < longitudFilayCol; i++) {
+export function generarCuadricula(longitudFilayCol) {
+  const table = document.createElement("table");
+  table.classList.add("tablaSopa");
+  for (var i = 0; i < longitudFilayCol; i++) {
     const fila = document.createElement("tr");
-    for (let j = 0; j < longitudFilayCol; j++) {
+    for (var j = 0; j < longitudFilayCol; j++) {
       const celda = document.createElement("td");
       celda.textContent = ``;
+      //CUANDO SE HACE CLICK EN UNA CELDA
+      celda.addEventListener("click", (ev) => tdFuncion(table, ev));
       fila.appendChild(celda);
     }
     table.appendChild(fila);
   }
-}
-
-//CALCULAR POSICION ALEATORIA
-// Devuelve una posición aleatoria dentro de los límites de la tabla
-function calcularPosicionAleatoria(totalCeldas) {
-  return Math.floor(Math.random() * totalCeldas);
-}
-
-//CALCULAR DIRECCION ALEATORIA
-// Devuelve una dirección aleatoria entre 0 y 7
-function calcularDireccionAleatoria() {
-  return Math.floor(Math.random() * 8);
+  document.getElementById("containerTablas").appendChild(table);
 }
 
 //FUNCION PARA CALCULAR SI UNA POSICION DIAGONAL DADA ES VALIDA O NO
 // Comprueba si una palabra cabe en una dirección diagonal desde cierta posición
-function posicionDiagonalValida(posicion, direccion, longitudFilayCol, palabra) {
+export function posicionDiagonalValida(
+  posicion,
+  direccion,
+  longitudFilayCol,
+  palabra
+) {
   // Obtenemos fila y columna en la que estamos dada la posición inicial
   let fila = Math.floor(posicion / longitudFilayCol);
   let columna = posicion % longitudFilayCol;
@@ -86,7 +42,11 @@ function posicionDiagonalValida(posicion, direccion, longitudFilayCol, palabra) 
       }
       break;
     case 3: // Diagonal abajo-izquierda
-      while (fila < longitudFilayCol && columna >= 0 && columna < longitudFilayCol) {
+      while (
+        fila < longitudFilayCol &&
+        columna >= 0 &&
+        columna < longitudFilayCol
+      ) {
         posicionesHastaElLimite++;
         fila++;
         columna--;
@@ -116,7 +76,7 @@ function posicionDiagonalValida(posicion, direccion, longitudFilayCol, palabra) 
 
 // CALCULAR POSICIONES VALIDAS DE CADA PALABRA
 // Devuelve un array con las direcciones válidas en las que una palabra puede colocarse desde cierta posición
-function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
+export function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
   let posicionesValidas = [];
   const fila = Math.floor(posicion / longitudFilayCol);
   const columna = posicion % longitudFilayCol;
@@ -130,7 +90,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
     puedeColocar = true;
     for (let i = 0; i < palabra.length; i++) {
       indiceTDS = fila * longitudFilayCol + (columna + i);
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -144,7 +108,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
       let f = fila + i;
       let c = columna + i;
       indiceTDS = f * longitudFilayCol + c;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -156,7 +124,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
     puedeColocar = true;
     for (let i = 0; i < palabra.length; i++) {
       indiceTDS = (fila + i) * longitudFilayCol + columna;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -170,7 +142,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
       let f = fila + i;
       let c = columna - i;
       indiceTDS = f * longitudFilayCol + c;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -182,7 +158,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
     puedeColocar = true;
     for (let i = 0; i < palabra.length; i++) {
       indiceTDS = fila * longitudFilayCol + (columna - i);
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -196,7 +176,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
       let f = fila - i;
       let c = columna - i;
       indiceTDS = f * longitudFilayCol + c;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -208,7 +192,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
     puedeColocar = true;
     for (let i = 0; i < palabra.length; i++) {
       indiceTDS = (fila - i) * longitudFilayCol + columna;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -222,7 +210,11 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
       let f = fila - i;
       let c = columna + i;
       indiceTDS = f * longitudFilayCol + c;
-      if (!TDS[indiceTDS] || (TDS[indiceTDS].innerText !== '' && TDS[indiceTDS].innerText !== palabra[i])) {
+      if (
+        !TDS[indiceTDS] ||
+        (TDS[indiceTDS].innerText !== "" &&
+          TDS[indiceTDS].innerText !== palabra[i])
+      ) {
         puedeColocar = false;
       }
     }
@@ -234,7 +226,8 @@ function sacarPosicionesValidas(palabra, longitudFilayCol, posicion, TDS) {
 }
 
 // COLOCAR PALABRA POR PALABRA COMPROBANDO POSICIONES VALIDAS
-function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
+export function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
+  let divPalabras = document.createElement("div");
   let posicionesValidas = null;
   let posicionInicial = null;
   let direccionPalabra = null;
@@ -245,24 +238,35 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
   // Recorremos cada palabra para colocarla en la tabla
   for (const palabra of arrayPalabras) {
     indicePalabra = 0; // Reiniciamos índice para la palabra actual
-    let intentos = 0;  // Contador de intentos para encontrar posición válida
+    let intentos = 0; // Contador de intentos para encontrar posición válida
     const maxIntentos = 10; // Limite de intentos para no quedar en bucle infinito
 
     // Intentamos encontrar una posición y dirección válida para la palabra
     do {
       posicionInicial = calcularPosicionAleatoria(totalCeldas); // Posición inicial aleatoria
-      posicionesValidas = sacarPosicionesValidas(palabra, longitudFilayCol, posicionInicial, TDS);
+      posicionesValidas = sacarPosicionesValidas(
+        palabra,
+        longitudFilayCol,
+        posicionInicial,
+        TDS
+      );
       intentos++;
-    } while ((!posicionesValidas || posicionesValidas.length === 0) && intentos < maxIntentos);
+    } while (
+      (!posicionesValidas || posicionesValidas.length === 0) &&
+      intentos < maxIntentos
+    );
 
     // Si encontramos alguna posición válida, colocamos la palabra
-    if (posicionesValidas && posicionesValidas.length > 0){
+    if (posicionesValidas && posicionesValidas.length > 0) {
       // Elegimos una dirección aleatoria DE ENTRE LAS VALIDAS PARA ESA PALABRA
       direccionPalabra = Math.floor(Math.random() * posicionesValidas.length);
       // Calculamos fila y columna de la posición inicial
       filaInicio = Math.floor(posicionInicial / longitudFilayCol);
       columnaInicio = posicionInicial % longitudFilayCol;
-
+      let spanPalabra = document.createElement("span");
+      spanPalabra.innerText = palabra;
+      divPalabras.appendChild(spanPalabra);
+      document.getElementById("palabras").appendChild(divPalabras);
       // Según la dirección, colocamos la palabra letra por letra en la tabla
       switch (posicionesValidas[direccionPalabra]) {
         case 0: // derecha
@@ -274,7 +278,11 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
           break;
         case 1: // diagonal abajo-derecha
           for (let i = filaInicio; i < filaInicio + palabra.length; i++) {
-            for (let j = columnaInicio; j < columnaInicio + palabra.length; j++) {
+            for (
+              let j = columnaInicio;
+              j < columnaInicio + palabra.length;
+              j++
+            ) {
               if (i - filaInicio === j - columnaInicio) {
                 let indice = i * longitudFilayCol + j;
                 TDS[indice].innerText = palabra.charAt(indicePalabra);
@@ -292,7 +300,11 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
           break;
         case 3: // diagonal abajo-izquierda
           for (let i = filaInicio; i < filaInicio + palabra.length; i++) {
-            for (let j = columnaInicio; j > columnaInicio - palabra.length; j--) {
+            for (
+              let j = columnaInicio;
+              j > columnaInicio - palabra.length;
+              j--
+            ) {
               if (i - filaInicio === columnaInicio - j) {
                 let indice = i * longitudFilayCol + j;
                 TDS[indice].innerText = palabra.charAt(indicePalabra);
@@ -310,7 +322,11 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
           break;
         case 5: // diagonal arriba-izquierda
           for (let i = filaInicio; i > filaInicio - palabra.length; i--) {
-            for (let j = columnaInicio; j > columnaInicio - palabra.length; j--) {
+            for (
+              let j = columnaInicio;
+              j > columnaInicio - palabra.length;
+              j--
+            ) {
               if (filaInicio - i === columnaInicio - j) {
                 let indice = i * longitudFilayCol + j;
                 TDS[indice].innerText = palabra.charAt(indicePalabra);
@@ -328,7 +344,11 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
           break;
         case 7: // diagonal arriba-derecha
           for (let i = filaInicio; i > filaInicio - palabra.length; i--) {
-            for (let j = columnaInicio; j < columnaInicio + palabra.length; j++) {
+            for (
+              let j = columnaInicio;
+              j < columnaInicio + palabra.length;
+              j++
+            ) {
               if (filaInicio - i === j - columnaInicio) {
                 let indice = i * longitudFilayCol + j;
                 TDS[indice].innerText = palabra.charAt(indicePalabra);
@@ -346,30 +366,41 @@ function colocalPalabras(arrayPalabras, totalCeldas, longitudFilayCol, TDS) {
 }
 
 // RELLENAS CELDAS SOBRANTES
-function rellenarSobrantes(TDS) {
+export function rellenarSobrantes(TDS) {
   const abecedario = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 
-    'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "ñ",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z",
   ];
   let indiceAleatorio = null;
   for (const celda of TDS) {
-    if(celda.innerText===''){
+    if (celda.innerText === "") {
       indiceAleatorio = Math.floor(Math.random() * abecedario.length);
-      celda.innerText= abecedario[indiceAleatorio];
+      celda.innerText = abecedario[indiceAleatorio];
     }
   }
 }
-
-let longitudFilayCol = calcularDimensionTabla(palabras);
-document.write("Longitud Fila y Col: " + longitudFilayCol + "<br>");
-let totalCeldas = longitudFilayCol * longitudFilayCol;
-document.write("Total Celdas: " + totalCeldas + "<br>");
-let posicion = calcularPosicionAleatoria(totalCeldas);
-generarCuadricula(longitudFilayCol);
-const fila = Math.floor(posicion / longitudFilayCol);
-const columna = posicion % longitudFilayCol;
-let TDS = table.querySelectorAll("td");
-/* console.log(TDS);
-console.log(sacarPosicionesValidas("oso", longitudFilayCol, posicion,TDS)); */
-colocalPalabras(palabras, totalCeldas, longitudFilayCol, TDS);
-rellenarSobrantes(TDS);
